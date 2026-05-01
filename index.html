@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Growth Hackers</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    scroll-behavior: smooth;
+    transition: 0.3s;
+}
+
+/* Dark Mode */
+.dark {
+    background: #121212;
+    color: white;
+}
+
+/* Navbar */
+nav {
+    position: fixed;
+    width: 100%;
+    background: #0a0a0a;
+    padding: 12px 0;
+    text-align: center;
+    z-index: 1000;
+}
+
+nav a {
+    color: white;
+    margin: 0 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a.active {
+    color: #00c3ff;
+}
+
+/* Toggle button */
+.toggle-btn {
+    position: fixed;
+    right: 20px;
+    top: 15px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Sections */
+section {
+    padding: 90px 20px;
+    min-height: 100vh;
+}
+
+/* Home */
+#home {
+    background: linear-gradient(to right, #00c3ff, #0072ff);
+    color: white;
+    text-align: center;
+}
+
+/* Services */
+#services {
+    background: #f9f9f9;
+}
+
+.dark #services {
+    background: #1e1e1e;
+}
+
+table {
+    width: 85%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background: #0072ff;
+    color: white;
+}
+
+/* Stats */
+#stats {
+    background: #111;
+    color: white;
+    text-align: center;
+}
+
+.stats-box {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+/* Contact */
+#contact {
+    background: #eee;
+    text-align: center;
+}
+
+.dark #contact {
+    background: #222;
+}
+
+input {
+    padding: 10px;
+}
+
+button {
+    padding: 10px;
+    background: #0072ff;
+    color: white;
+    border: none;
+}
+</style>
+
+</head>
+<body>
+
+<button class="toggle-btn" onclick="toggleMode()">🌙</button>
+
+<nav>
+    <a href="#home" class="nav-link">Home</a>
+    <a href="#services" class="nav-link">Services</a>
+    <a href="#stats" class="nav-link">Stats</a>
+    <a href="#contact" class="nav-link">Contact</a>
+</nav>
+
+<section id="home">
+    <h1>Growth Hackers</h1>
+    <p>Smart Digital Marketing Agency</p>
+</section>
+
+<section id="services">
+    <h2 style="text-align:center;">Packages</h2>
+    <table>
+        <tr>
+            <th>Feature</th><th>Basic</th><th>Pro</th><th>Premium</th>
+        </tr>
+        <tr><td>SEO</td><td>✔</td><td>✔</td><td>✔</td></tr>
+        <tr><td>Ads</td><td>✖</td><td>✔</td><td>✔</td></tr>
+        <tr><td>Analytics</td><td>✖</td><td>✔</td><td>✔</td></tr>
+    </table>
+</section>
+
+<section id="stats">
+    <h2>Stats</h2>
+    <div class="stats-box">
+        <div><p class="counter" data-target="200">0</p><p>Clients</p></div>
+        <div><p class="counter" data-target="500">0</p><p>Projects</p></div>
+        <div><p class="counter" data-target="95">0</p><p>Success%</p></div>
+    </div>
+</section>
+
+<section id="contact">
+    <h2>Newsletter</h2>
+    <form onsubmit="subscribe(event)">
+        <input type="email" id="email" placeholder="Enter email" required>
+        <button>Subscribe</button>
+    </form>
+    <p id="msg"></p>
+</section>
+
+<script>
+// Dark mode
+function toggleMode() {
+    document.body.classList.toggle("dark");
+}
+
+// Counter
+let started = false;
+
+window.addEventListener("scroll", () => {
+
+    // Counter
+    let stats = document.getElementById("stats").offsetTop;
+
+    if (window.scrollY > stats - 300 && !started) {
+        started = true;
+
+        document.querySelectorAll(".counter").forEach(c => {
+            let target = +c.dataset.target;
+            let count = 0;
+
+            let interval = setInterval(() => {
+                count += Math.ceil(target / 40);
+                if (count >= target) {
+                    c.innerText = target;
+                    clearInterval(interval);
+                } else {
+                    c.innerText = count;
+                }
+            }, 50);
+        });
+    }
+
+    // Active nav
+    document.querySelectorAll("section").forEach(sec => {
+        let top = window.scrollY;
+        let offset = sec.offsetTop - 100;
+        let height = sec.offsetHeight;
+        let id = sec.getAttribute("id");
+
+        if (top >= offset && top < offset + height) {
+            document.querySelectorAll(".nav-link").forEach(link => {
+                link.classList.remove("active");
+            });
+            document.querySelector(`nav a[href="#${id}"]`).classList.add("active");
+        }
+    });
+});
+
+// Newsletter
+function subscribe(e) {
+    e.preventDefault();
+    let email = document.getElementById("email").value;
+    let msg = document.getElementById("msg");
+
+    if (email.includes("@")) {
+        msg.innerText = "Subscribed Successfully!";
+        msg.style.color = "green";
+    } else {
+        msg.innerText = "Invalid Email!";
+        msg.style.color = "red";
+    }
+}
+</script>
+
+</body>
+</html>
